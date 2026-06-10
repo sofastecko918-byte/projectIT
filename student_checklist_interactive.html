@@ -1,357 +1,629 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Интерактивный чек-лист</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Чек-лист рабочего места | Интерактивная оценка</title>
   <style>
-    :root{
-      --bg:#f4f7fc; --card:#ffffff; --text:#18212f; --muted:#5f6b7a; --line:#dde6f0;
-      --primary:#2457d6; --primary2:#4f86ff; --soft:#ecf3ff; --green:#0f766e;
-      --warn:#9a6700; --bad:#b42318; --shadow:0 14px 36px rgba(24,33,47,.10); --radius:22px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0; font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif; color:var(--text);
-      background:linear-gradient(180deg,#f7faff 0%, #f2f5fb 100%); line-height:1.56;
+
+    body {
+      background: linear-gradient(145deg, #f4f9ff 0%, #eef2fa 100%);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+      color: #1a2634;
+      line-height: 1.5;
+      padding: 2rem 1rem;
     }
-    .wrap{max-width:1120px; margin:0 auto; padding:28px 18px 56px;}
-    .hero{
-      background:linear-gradient(135deg,#1f4ec9 0%, #3a76ff 100%);
-      color:#fff; border-radius:28px; padding:28px 26px; box-shadow:var(--shadow);
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
     }
-    .eyebrow{
-      display:inline-block; padding:7px 12px; border-radius:999px;
-      background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.18);
-      font-size:13px; font-weight:700; letter-spacing:.02em; margin-bottom:14px;
+
+    /* карточки и глобальные стили */
+    .card {
+      background: #ffffff;
+      border-radius: 2rem;
+      box-shadow: 0 18px 35px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s;
     }
-    h1{margin:0; font-size:clamp(28px,4vw,42px); line-height:1.08;}
-    .hero p{margin:14px 0 0; max-width:860px; font-size:17px; opacity:.98;}
-    .nav{
-      display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;
+
+    .hero {
+      background: linear-gradient(125deg, #0b2b5c, #1d4ed8);
+      border-radius: 2rem;
+      padding: 2rem 2rem 1.8rem;
+      margin-bottom: 2rem;
+      color: white;
+      box-shadow: 0 20px 35px -12px rgba(0, 35, 90, 0.25);
     }
-    .btn{
-      text-decoration:none; display:inline-flex; align-items:center; justify-content:center;
-      padding:11px 16px; border-radius:14px; font-weight:700; transition:.2s ease;
-      border:1px solid transparent;
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(4px);
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255,255,255,0.2);
     }
-    .btn.primary{background:#fff; color:#1f4ec9;}
-    .btn.secondary{background:rgba(255,255,255,.12); color:#fff; border-color:rgba(255,255,255,.20);}
-    .section{
-      margin-top:18px; background:var(--card); border-radius:var(--radius);
-      box-shadow:var(--shadow); border:1px solid #edf2f8; padding:24px 22px;
+
+    .hero h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
     }
-    .section h2{margin:0 0 10px; font-size:26px; line-height:1.15;}
-    .lead{margin:0 0 14px; color:var(--muted); font-size:16px;}
-    .score-box{
-      background:#edf4ff; border:1px solid #d4e2ff; color:#153d9e; border-radius:18px; padding:14px 16px;
+
+    .hero p {
+      font-size: 1rem;
+      opacity: 0.9;
+      max-width: 85%;
     }
-    .grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
-    .cat{
-      border:1px solid var(--line); border-radius:18px; padding:16px; background:#fff;
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
     }
-    .cat h3{margin:0 0 8px; font-size:19px;}
-    .subtitle{color:var(--muted); margin:0 0 12px; font-size:14px;}
-    .item{padding:12px 0; border-top:1px dashed #e7edf5;}
-    .item:first-of-type{border-top:none}
-    .item .txt{margin-bottom:8px;}
-    .scale{display:flex; gap:8px; flex-wrap:wrap;}
-    .scale label{
-      display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px;
-      background:#f7f9fc; border:1px solid #e3eaf3; cursor:pointer; font-size:14px;
+
+    .nav-btn {
+      background: rgba(255,255,255,0.12);
+      border-radius: 2rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: white;
+      text-decoration: none;
+      transition: 0.2s;
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(2px);
     }
-    .summary{
-      display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:14px;
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-2px);
     }
-    .sum-card{
-      background:#fff; border:1px solid var(--line); border-radius:18px; padding:16px;
+
+    .section-card {
+      background: white;
+      border-radius: 1.75rem;
+      padding: 1.6rem 1.8rem;
+      margin-bottom: 1.8rem;
+      box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.05);
+      border: 1px solid #eef2f8;
     }
-    .sum-card strong{display:block; font-size:14px; color:var(--muted);}
-    .big{font-size:34px; font-weight:800; color:var(--primary); line-height:1; margin-top:8px;}
-    .band{
-      padding:12px 14px; border-radius:16px; font-weight:700;
+
+    .section-title {
+      font-size: 1.65rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.3px;
     }
-    .band.good{background:#ecfdf5; color:var(--green); border:1px solid #bbf7d0;}
-    .band.warn{background:#fffbeb; color:var(--warn); border:1px solid #fde68a;}
-    .band.bad{background:#fef2f2; color:var(--bad); border:1px solid #fecaca;}
-    textarea{
-      width:100%; min-height:110px; resize:vertical; border:1px solid var(--line); border-radius:14px;
-      padding:12px 14px; font:inherit; color:var(--text); background:#fff;
+
+    .section-sub {
+      color: #4b5b6c;
+      border-left: 3px solid #1d4ed8;
+      padding-left: 0.9rem;
+      margin: 0.5rem 0 1.4rem 0;
+      font-size: 0.9rem;
     }
-    .cols{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
-    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
-    @media (max-width:960px){
-      .grid,.summary,.cols{grid-template-columns:1fr;}
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.4rem;
+    }
+
+    .category-block {
+      background: #fefefe;
+      border: 1px solid #e9edf2;
+      border-radius: 1.5rem;
+      padding: 1.2rem 1.3rem;
+      transition: box-shadow 0.2s;
+    }
+
+    .category-block h3 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .category-desc {
+      font-size: 0.8rem;
+      color: #5f6c7e;
+      margin-bottom: 1rem;
+      border-bottom: 1px dashed #e2e8f0;
+      padding-bottom: 0.5rem;
+    }
+
+    .checklist-item {
+      padding: 0.9rem 0;
+      border-bottom: 1px solid #eff3f8;
+    }
+    .checklist-item:last-child {
+      border-bottom: none;
+    }
+    .item-text {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+      color: #1f2a3e;
+    }
+    .radio-group {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .radio-group label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #f8fafc;
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      border: 1px solid #e2eaf1;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.1s;
+    }
+    .radio-group input {
+      accent-color: #1d4ed8;
+      width: 1rem;
+      height: 1rem;
+      margin: 0;
+    }
+    .radio-group label:has(input:checked) {
+      background: #eef3ff;
+      border-color: #1d4ed8;
+      color: #0a2b6e;
+    }
+
+    /* итоговая панель */
+    .result-panel {
+      background: #fafcff;
+      border-radius: 1.8rem;
+      padding: 1.6rem;
+      border: 1px solid #e2edff;
+      margin-top: 0.5rem;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.6rem;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 1.2rem;
+      padding: 0.9rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      border: 1px solid #eef2f8;
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      color: #567;
+    }
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #0f2b62;
+      line-height: 1.2;
+    }
+    .result-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      display: inline-block;
+      margin-top: 0.5rem;
+    }
+    .result-badge.green {
+      background: #e0f2e9;
+      color: #0b5e42;
+    }
+    .double-textarea {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin: 1.2rem 0;
+    }
+    textarea {
+      width: 100%;
+      padding: 0.9rem;
+      border-radius: 1rem;
+      border: 1px solid #dce3ec;
+      font-family: inherit;
+      font-size: 0.85rem;
+      background: white;
+      resize: vertical;
+    }
+    .btn-save {
+      background: linear-gradient(95deg, #1e3a8a, #2563eb);
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .btn-save:hover {
+      background: linear-gradient(95deg, #0f2b6b, #1d4ed8);
+      transform: scale(0.98);
+    }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: #6c7a8e;
+    }
+    @media (max-width: 720px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem;}
+      .double-textarea { grid-template-columns: 1fr; }
+      .hero p { max-width: 100%; }
+      .section-card { padding: 1.2rem; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <section class="hero">
-      <div class="eyebrow">Интерактивный чек-лист</div>
-      <h1>Оценка рабочего пространства</h1>
-      <p>Отмечайте для каждого пункта один вариант: 0 — не соответствует, 1 — соответствует частично, 2 — соответствует полностью. После заполнения страница автоматически посчитает сумму баллов и позволит перенести результаты в шаблон отчёта.</p>
-      <div class="nav">
-        <a class="btn primary" href="student_report_template.html">Открыть шаблон отчёта</a>
-        <a class="btn secondary" href="student_html_guide.html">Инструкция по HTML и ИИ</a>
-        <a class="btn secondary" href="student_infrastructure_project.html">Проект оборудования</a>
-        <a class="btn secondary" href="index.html">Главная страница</a>
-        <a class="btn secondary" href="student_publish_site_guide.html">Как опубликовать сайт</a>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>Шкала оценки</h2>
-      <div class="score-box">
-        <strong>0 баллов</strong> — условие не выполнено или выражено слабо.<br>
-        <strong>1 балл</strong> — условие выполнено частично.<br>
-        <strong>2 балла</strong> — условие выполнено полноценно и соответствует задаче рабочего места.
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>Основные категории</h2>
-      <p class="lead">Пройдите пункты последовательно. Итоговый результат появится ниже автоматически.</p>
-      <div class="grid" id="checklist"></div>
-    </section>
-
-    <section class="section" id="result">
-      <h2>Итоговая оценка</h2>
-      <div class="summary">
-        <div class="sum-card">
-          <strong>Набрано баллов</strong>
-          <div class="big" id="sum">90</div>
-        </div>
-        <div class="sum-card">
-          <strong>Максимум</strong>
-          <div class="big" id="max">92</div>
-        </div>
-        <div class="sum-card">
-          <strong>Процент</strong>
-          <div class="big" id="percent">98%</div>
-        </div>
-        <div class="sum-card">
-          <strong>Результат</strong>
-          <div id="bandWrap" style="margin-top:8px;">Рабочее место организовано грамотно и соответствует задачам</div>
-        </div>
-      </div>
-
-      <div class="cols" style="margin-top:16px;">
-        <div>
-          <h3>Три сильные стороны</h3>
-          <textarea id="strengths" placeholder="Удачное расположение монитора. Верхняя граница экрана на уровне глаз, шея не напрягается даже через 4-5 часов работы. Хорошая кабельная организация. Все провода убраны."></textarea>
-        </div>
-        <div>
-          <h3>Три проблемные зоны</h3>
-          <textarea id="problems" placeholder="Нехватка глубины стола. Клавиатура и монитор стоят слишком близко к глазам, руки упираются в край стола. Плохое локальное освещение вечером. Единственный источник света - верхняя люстра, которая даёт блики."></textarea>
-        </div>
-      </div>
-
-      <div style="margin-top:14px;">
-        <h3>Три улучшения с наибольшим эффектом</h3>
-        <textarea id="improvements" placeholder="Поменять стол на более удобный и подходящий для работы за компьютером. Добавить настольную лампу с регулируемым ярким светом. Заменить пуфик на качественный стул с регулировкой высоты сидения и спинки."></textarea>
-      </div>
-
-      <div class="actions">
-        <button class="btn primary" id="saveBtn" type="button" style="background:linear-gradient(135deg,#2457d6 0%, #4f86ff 100%); color:#fff;">Сохранить результаты</button>
-        <a class="btn secondary" href="student_report_template.html" id="toReport">Перейти к шаблону отчёта</a>
-      </div>
-    </section>
+<div class="container">
+  <div class="hero">
+    <div class="hero-badge">⚡ Интерактивный чек-лист</div>
+    <h1>Рабочее место: эргономика, техника, эффективность</h1>
+    <p>Оцените каждый параметр: 0 — не соответствует, 1 — частично, 2 — полностью. Итоговая оценка формируется автоматически на основе ваших ответов.</p>
+    <div class="nav-links">
+      <a class="nav-btn" href="student_report_template.html">📄 Шаблон отчёта</a>
+      <a class="nav-btn" href="student_html_guide.html">📖 Инструкция по HTML</a>
+      <a class="nav-btn" href="student_infrastructure_project.html">🖥️ Проект оборудования</a>
+      <a class="nav-btn" href="index.html">🏠 Главная</a>
+      <a class="nav-btn" href="student_publish_site_guide.html">🌐 Публикация сайта</a>
+    </div>
   </div>
 
-<script>
-const data = [
-  {
-    title:"1. Назначение рабочего места",
-    subtitle:"Соответствует ли конфигурация реальным задачам пользователя.",
-    items:[
-      "Понятно, для каких задач предназначено рабочее место: учёба, документооборот, аналитика, проектная работа, графика, видеосвязь, программирование.",
-      "Подбор техники соответствует этим задачам, а не принципу «чем мощнее, тем лучше».",
-      "Рабочее место не перегружено лишними устройствами, которые фактически не используются.",
-      "Конфигурация допускает разумный запас по производительности на ближайшую перспективу."
-    ]
-  },
-  {
-    title:"2. Пространство и компоновка",
-    subtitle:"Насколько рационально организовано пространство и размещено оборудование.",
-    items:[
-      "Стол и рабочая поверхность достаточны по размеру для техники и комфортной работы.",
-      "Оборудование размещено так, чтобы не мешать движениям и доступу к основным предметам.",
-      "Провода не создают беспорядка, не мешают работе и не формируют опасных зон.",
-      "Розетки, удлинители и блоки питания расположены безопасно и удобно.",
-      "В рабочей зоне нет помех для вентиляции техники и свободного доступа к оборудованию."
-    ]
-  },
-  {
-    title:"3. Эргономика",
-    subtitle:"Оценка посадки, положения монитора и условий длительной работы.",
-    items:[
-      "Высота стола и посадка позволяют работать без постоянного напряжения спины и плеч.",
-      "Монитор расположен на комфортной высоте: верхняя часть экрана примерно на уровне глаз или немного ниже.",
-      "Расстояние до экрана достаточное для устойчивой и ненапряжённой работы.",
-      "Клавиатура и мышь размещены так, чтобы руки не были постоянно подняты или изогнуты.",
-      "Освещение не создаёт сильных бликов на экране и не мешает восприятию изображения.",
-      "Рабочее место допускает длительную работу без выраженного дискомфорта."
-    ]
-  },
-  {
-    title:"4. Экран и визуальная нагрузка",
-    subtitle:"Соответствие монитора задачам и условиям восприятия.",
-    items:[
-      "Размер экрана соответствует задачам пользователя.",
-      "Разрешение экрана достаточно для комфортной работы с документами, таблицами и интерфейсами.",
-      "Яркость и качество изображения позволяют работать без избыточного напряжения зрения.",
-      "Монитор установлен устойчиво и не занимает пространство нерационально.",
-      "При необходимости предусмотрен второй экран или возможность его подключения."
-    ]
-  },
-  {
-    title:"5. Форм-фактор и тип техники",
-    subtitle:"Насколько выбранная форма техники соответствует сценарию использования.",
-    items:[
-      "Форм-фактор устройства соответствует условиям использования: настольный ПК, ноутбук, моноблок, мини-ПК.",
-      "Выбранная форма техники оправдана задачами, а не только внешним удобством.",
-      "При необходимости модернизации выбран вариант, который допускает обслуживание и замену компонентов.",
-      "Для стационарного рабочего места техника не теряет в удобстве из-за чрезмерной компактности.",
-      "Для мобильной работы не используется избыточно громоздкая конфигурация."
-    ]
-  },
-  {
-    title:"6. Оперативная память",
-    subtitle:"Соответствие ОЗУ реальной нагрузке рабочего места.",
-    items:[
-      "Объём оперативной памяти соответствует числу одновременно используемых программ.",
-      "Конфигурация памяти подходит под рабочую нагрузку: браузер, документы, видеосвязь, аналитика, специализированные программы.",
-      "Нет признаков того, что системе регулярно не хватает ОЗУ: зависания, медленное переключение между задачами, просадки при открытии файлов.",
-      "Память подобрана не по минимальному порогу запуска системы, а по реальному сценарию работы.",
-      "Для многозадачной среды предусмотрен разумный запас по ОЗУ."
-    ]
-  },
-  {
-    title:"7. Накопители данных",
-    subtitle:"Оценка скорости, объёма и логики хранения данных.",
-    items:[
-      "Системный накопитель достаточно быстр для запуска операционной системы и приложений.",
-      "Объём накопителя соответствует реальному объёму рабочих данных.",
-      "Хранилище выбрано по задаче: скорость, ёмкость, надёжность, бюджет.",
-      "В конфигурации учтено различие между рабочим накопителем и архивным хранением.",
-      "При необходимости предусмотрена логика резервирования или внешнего хранения данных."
-    ]
-  },
-  {
-    title:"8. Надёжность, обслуживание, срок службы",
-    subtitle:"Оценка устойчивости системы в реальной эксплуатации.",
-    items:[
-      "Техника не перегревается в условиях реального использования.",
-      "Корпус, форм-фактор и размещение не затрудняют вентиляцию.",
-      "Есть возможность очистки, обслуживания и замены ключевых компонентов.",
-      "Компоновка не приводит к ускоренному износу техники из-за пыли, перегрева или вибраций.",
-      "Рабочее место допускает безопасную и длительную эксплуатацию."
-    ]
-  },
-  {
-    title:"9. Логика закупки для организации",
-    subtitle:"Оценка техники с точки зрения управленческого решения.",
-    items:[
-      "Конфигурация соответствует реальной категории сотрудников, а не усреднённому шаблону «для всех одинаково».",
-      "Баланс между ценой и производительностью выглядит обоснованным.",
-      "Нет явной переплаты за характеристики, которые не будут использоваться.",
-      "Нет чрезмерной экономии на компонентах, влияющих на повседневную эффективность.",
-      "Выбранная конфигурация подходит для массового обслуживания, эксплуатации и обновления.",
-      "Закупка учитывает не только стартовую цену, но и удобство работы, срок службы и перспективу модернизации."
-    ]
-  }
-];
+  <div class="section-card">
+    <div class="section-title">📋 Шкала оценки</div>
+    <div style="background:#F5F9FF; padding:0.8rem 1rem; border-radius:1.2rem;">
+      <span style="font-weight:700;">0</span> — не выполнено / критическое несоответствие<br>
+      <span style="font-weight:700;">1</span> — выполнено частично, есть недостатки<br>
+      <span style="font-weight:700;">2</span> — полностью соответствует, оптимально для задач
+    </div>
+  </div>
 
-const checklist = document.getElementById('checklist');
-let itemIndex = 0;
-let maxScore = 0;
+  <div class="grid-2col" id="checklist-container"></div>
 
-data.forEach((cat, ci) => {
-  const box = document.createElement('div');
-  box.className = 'cat';
-  box.innerHTML = `<h3>${cat.title}</h3><p class="subtitle">${cat.subtitle}</p>`;
-  cat.items.forEach((text) => {
-    maxScore += 2;
-    const key = `item_${itemIndex}`;
-    const item = document.createElement('div');
-    item.className = 'item';
-    item.innerHTML = `
-      <div class="txt">${text}</div>
-      <div class="scale">
-        <label><input type="radio" name="${key}" value="0">0</label>
-        <label><input type="radio" name="${key}" value="1">1</label>
-        <label><input type="radio" name="${key}" value="2">2</label>
+  <div class="section-card" id="result-section">
+    <div class="section-title">📊 Итоговая оценка</div>
+    <div class="result-panel">
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card"><div class="stat-label">Набрано баллов</div><div class="stat-number" id="totalScore">0</div></div>
+        <div class="stat-card"><div class="stat-label">Максимум</div><div class="stat-number" id="maxScore">92</div></div>
+        <div class="stat-card"><div class="stat-label">Процент</div><div class="stat-number" id="percentScore">0%</div></div>
+        <div class="stat-card"><div class="stat-label">Результат</div><div id="resultText" class="result-badge green" style="font-size:0.85rem; margin-top:0.3rem;">—</div></div>
       </div>
-    `;
-    box.appendChild(item);
-    itemIndex++;
-  });
-  checklist.appendChild(box);
-});
-document.getElementById('max').textContent = maxScore;
 
-function updateSummary(){
-  let sum = 0;
-  document.querySelectorAll('input[type="radio"]:checked').forEach(el => sum += Number(el.value));
-  const percent = maxScore ? Math.round(sum / maxScore * 100) : 0;
-  document.getElementById('sum').textContent = sum;
-  document.getElementById('percent').textContent = percent + '%';
+      <div class="double-textarea">
+        <div>
+          <label style="font-weight:600;">✨ Три сильные стороны</label>
+          <textarea id="strengthsField" placeholder="Сильные стороны рабочего места..."></textarea>
+        </div>
+        <div>
+          <label style="font-weight:600;">⚠️ Три проблемные зоны</label>
+          <textarea id="problemsField" placeholder="Проблемные зоны..."></textarea>
+        </div>
+      </div>
+      <div>
+        <label style="font-weight:600;">🚀 Три улучшения с наибольшим эффектом</label>
+        <textarea id="improvementsField" rows="3" placeholder="Рекомендации..."></textarea>
+      </div>
+      <div style="display: flex; gap: 1rem; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
+        <button class="btn-save" id="saveDataBtn">💾 Сохранить результаты</button>
+        <span style="font-size:0.75rem; color:#4f6f8f;">✅ Данные сохраняются в браузере автоматически при изменении</span>
+      </div>
+    </div>
+  </div>
+  <footer>Интерактивная оценка рабочего места — чек-лист по стандартам эргономики и технической оснащённости</footer>
+</div>
 
-  let cls = 'bad', text = 'Требуется серьёзная переработка';
-  if(percent >= 81){ cls='good'; text='Рабочее место организовано грамотно и соответствует задачам';}
-  else if(percent >= 61){ cls='warn'; text='Хорошая организация, есть точки для улучшения';}
-  else if(percent >= 41){ cls='warn'; text='Место функционально, но заметны ограничения';}
-  else if(percent >= 21){ cls='bad'; text='Базовая пригодность, но много слабых мест';}
-  document.getElementById('bandWrap').innerHTML = `<div class="band ${cls}">${text}</div>`;
-}
+<script>
+  const checklistData = [
+    { title: "1. Назначение рабочего места", desc: "Соответствует ли конфигурация реальным задачам пользователя.",
+      items: [
+        "Понятно, для каких задач предназначено рабочее место: учёба, документооборот, аналитика, проектная работа, графика, видеосвязь, программирование.",
+        "Подбор техники соответствует этим задачам, а не принципу «чем мощнее, тем лучше».",
+        "Рабочее место не перегружено лишними устройствами, которые фактически не используются.",
+        "Конфигурация допускает разумный запас по производительности на ближайшую перспективу."
+      ] },
+    { title: "2. Пространство и компоновка", desc: "Насколько рационально организовано пространство и размещено оборудование.",
+      items: [
+        "Стол и рабочая поверхность достаточны по размеру для техники и комфортной работы.",
+        "Оборудование размещено так, чтобы не мешать движениям и доступу к основным предметам.",
+        "Провода не создают беспорядка, не мешают работе и не формируют опасных зон.",
+        "Розетки, удлинители и блоки питания расположены безопасно и удобно.",
+        "В рабочей зоне нет помех для вентиляции техники и свободного доступа к оборудованию."
+      ] },
+    { title: "3. Эргономика", desc: "Оценка посадки, положения монитора и условий длительной работы.",
+      items: [
+        "Высота стола и посадка позволяют работать без постоянного напряжения спины и плеч.",
+        "Монитор расположен на комфортной высоте: верхняя часть экрана примерно на уровне глаз или немного ниже.",
+        "Расстояние до экрана достаточное для устойчивой и ненапряжённой работы.",
+        "Клавиатура и мышь размещены так, чтобы руки не были постоянно подняты или изогнуты.",
+        "Освещение не создаёт сильных бликов на экране и не мешает восприятию изображения.",
+        "Рабочее место допускает длительную работу без выраженного дискомфорта."
+      ] },
+    { title: "4. Экран и визуальная нагрузка", desc: "Соответствие монитора задачам и условиям восприятия.",
+      items: [
+        "Размер экрана соответствует задачам пользователя.",
+        "Разрешение экрана достаточно для комфортной работы с документами, таблицами и интерфейсами.",
+        "Яркость и качество изображения позволяют работать без избыточного напряжения зрения.",
+        "Монитор установлен устойчиво и не занимает пространство нерационально.",
+        "При необходимости предусмотрен второй экран или возможность его подключения."
+      ] },
+    { title: "5. Форм-фактор и тип техники", desc: "Насколько выбранная форма техники соответствует сценарию использования.",
+      items: [
+        "Форм-фактор устройства соответствует условиям использования: настольный ПК, ноутбук, моноблок, мини-ПК.",
+        "Выбранная форма техники оправдана задачами, а не только внешним удобством.",
+        "При необходимости модернизации выбран вариант, который допускает обслуживание и замену компонентов.",
+        "Для стационарного рабочего места техника не теряет в удобстве из-за чрезмерной компактности.",
+        "Для мобильной работы не используется избыточно громоздкая конфигурация."
+      ] },
+    { title: "6. Оперативная память", desc: "Соответствие ОЗУ реальной нагрузке рабочего места.",
+      items: [
+        "Объём оперативной памяти соответствует числу одновременно используемых программ.",
+        "Конфигурация памяти подходит под рабочую нагрузку: браузер, документы, видеосвязь, аналитика, специализированные программы.",
+        "Нет признаков того, что системе регулярно не хватает ОЗУ: зависания, медленное переключение между задачами, просадки при открытии файлов.",
+        "Память подобрана не по минимальному порогу запуска системы, а по реальному сценарию работы.",
+        "Для многозадачной среды предусмотрен разумный запас по ОЗУ."
+      ] },
+    { title: "7. Накопители данных", desc: "Оценка скорости, объёма и логики хранения данных.",
+      items: [
+        "Системный накопитель достаточно быстрый для запуска операционной системы и приложений.",
+        "Объём накопителя соответствует реальному объёму рабочих данных.",
+        "Хранилище выбрано по задаче: скорость, ёмкость, надёжность, бюджет.",
+        "В конфигурации учтено различие между рабочим накопителем и архивным хранением.",
+        "При необходимости предусмотрена логика резервирования или внешнего хранения данных."
+      ] },
+    { title: "8. Надёжность, обслуживание, срок службы", desc: "Оценка устойчивости системы в реальной эксплуатации.",
+      items: [
+        "Техника не перегревается в условиях реального использования.",
+        "Корпус, форм-фактор и размещение не затрудняют вентиляцию.",
+        "Есть возможность очистки, обслуживания и замены ключевых компонентов.",
+        "Компоновка не приводит к ускоренному износу техники из-за пыли, перегрева или вибраций.",
+        "Рабочее место допускает безопасную и длительную эксплуатацию."
+      ] },
+    { title: "9. Логика закупки для организации", desc: "Оценка техники с точки зрения управленческого решения.",
+      items: [
+        "Конфигурация соответствует реальной категории сотрудников, а не усреднённому шаблону «для всех одинаково».",
+        "Баланс между ценой и производительностью выглядит обоснованным.",
+        "Нет явной переплаты за характеристики, которые не будут использоваться.",
+        "Нет чрезмерной экономии на компонентах, влияющих на повседневную эффективность.",
+        "Выбранная конфигурация подходит для массового обслуживания, эксплуатации и обновления.",
+        "Закупка учитывает не только стартовую цену, но и удобство работы, срок службы и перспективу модернизации."
+      ] }
+  ];
 
-function saveAll(){
-  const scores = {};
-  document.querySelectorAll('input[type="radio"]:checked').forEach(el => {
-    scores[el.name] = el.value;
-  });
-  const payload = {
-    scores,
-    strengths: document.getElementById('strengths').value,
-    problems: document.getElementById('problems').value,
-    improvements: document.getElementById('improvements').value,
-    sum: document.getElementById('sum').textContent,
-    max: document.getElementById('max').textContent,
-    percent: document.getElementById('percent').textContent,
-    interpretation: document.getElementById('bandWrap').innerText.trim()
-  };
-  localStorage.setItem('workspaceChecklistData', JSON.stringify(payload));
-}
+  let allRadioItems = [];   
+  let maxTotal = 0;
+  const container = document.getElementById('checklist-container');
+  
+  function buildChecklist() {
+    container.innerHTML = '';
+    let itemCounter = 0;
+    for (let cat of checklistData) {
+      const catDiv = document.createElement('div');
+      catDiv.className = 'category-block';
+      catDiv.innerHTML = `
+        <h3>${cat.title}</h3>
+        <div class="category-desc">${cat.desc}</div>
+        <div class="items-list" id="cat-${itemCounter}"></div>
+      `;
+      const itemsContainer = catDiv.querySelector('.items-list');
+      for (let itemText of cat.items) {
+        const groupName = `q_${itemCounter}`;
+        const itemWrapper = document.createElement('div');
+        itemWrapper.className = 'checklist-item';
+        itemWrapper.innerHTML = `
+          <div class="item-text">${itemText}</div>
+          <div class="radio-group" data-group="${groupName}">
+            <label><input type="radio" name="${groupName}" value="0"> 0</label>
+            <label><input type="radio" name="${groupName}" value="1"> 1</label>
+            <label><input type="radio" name="${groupName}" value="2"> 2</label>
+          </div>
+        `;
+        itemsContainer.appendChild(itemWrapper);
+        const radios = itemWrapper.querySelectorAll(`input[name="${groupName}"]`);
+        allRadioItems.push({ name: groupName, radios: [...radios], itemText: itemText });
+        maxTotal += 2;
+        itemCounter++;
+      }
+      container.appendChild(catDiv);
+    }
+    document.getElementById('maxScore').innerText = maxTotal;
+  }
 
-function loadAll(){
-  const raw = localStorage.getItem('workspaceChecklistData');
-  if(!raw) return;
-  try{
-    const data = JSON.parse(raw);
-    Object.entries(data.scores || {}).forEach(([name,val]) => {
-      const input = document.querySelector(`input[name="${name}"][value="${val}"]`);
-      if(input) input.checked = true;
+  function computeTotal() {
+    let total = 0;
+    for (let r of allRadioItems) {
+      let checkedVal = null;
+      for (let radio of r.radios) {
+        if (radio.checked) {
+          checkedVal = parseInt(radio.value, 10);
+          break;
+        }
+      }
+      if (checkedVal !== null) total += checkedVal;
+    }
+    return total;
+  }
+
+  function updateSummaryPanel() {
+    const total = computeTotal();
+    const maxV = maxTotal;
+    const percent = maxV ? Math.round((total / maxV) * 100) : 0;
+    document.getElementById('totalScore').innerText = total;
+    document.getElementById('percentScore').innerText = percent + '%';
+    let resultMessage = '';
+    let badgeClass = 'result-badge';
+    if (percent >= 85) resultMessage = '✅ Рабочее место организовано грамотно и соответствует задачам', badgeClass += ' green';
+    else if (percent >= 65) resultMessage = '🟡 Хорошая организация, есть точки для улучшения', badgeClass += ' green';
+    else if (percent >= 45) resultMessage = '⚡ Функционально, но заметны ограничения', badgeClass += ' green';
+    else resultMessage = '🔴 Требуется серьёзная переработка', badgeClass += ' green';
+    
+    const resultDiv = document.getElementById('resultText');
+    resultDiv.innerText = resultMessage;
+    resultDiv.className = 'result-badge green';
+  }
+
+  function persistToLocalStorage() {
+    const scoresMap = {};
+    for (let r of allRadioItems) {
+      let selected = null;
+      for (let radio of r.radios) {
+        if (radio.checked) {
+          selected = radio.value;
+          break;
+        }
+      }
+      if (selected !== null) scoresMap[r.name] = selected;
+    }
+    const storageData = {
+      scores: scoresMap,
+      strengths: document.getElementById('strengthsField').value,
+      problems: document.getElementById('problemsField').value,
+      improvements: document.getElementById('improvementsField').value,
+      timestamp: Date.now()
+    };
+    localStorage.setItem('workspace_checklist_full', JSON.stringify(storageData));
+  }
+
+  function loadFromLocalStorage() {
+    const raw = localStorage.getItem('workspace_checklist_full');
+    if (!raw) return false;
+    try {
+      const data = JSON.parse(raw);
+      if (data.scores) {
+        for (let r of allRadioItems) {
+          const savedVal = data.scores[r.name];
+          if (savedVal !== undefined) {
+            for (let radio of r.radios) {
+              if (radio.value === savedVal) {
+                radio.checked = true;
+                break;
+              }
+            }
+          }
+        }
+      }
+      if (data.strengths !== undefined) document.getElementById('strengthsField').value = data.strengths;
+      if (data.problems !== undefined) document.getElementById('problemsField').value = data.problems;
+      if (data.improvements !== undefined) document.getElementById('improvementsField').value = data.improvements;
+      updateSummaryPanel();
+      return true;
+    } catch(e) { return false; }
+  }
+
+  function applyDefaultScoresFromDraft() {
+    const targetText1 = "Стол и рабочая поверхность достаточны по размеру для техники и комфортной работы.";   
+    const targetText2 = "Освещение не создаёт сильных бликов на экране и не мешает восприятию изображения."; 
+    
+    for (let r of allRadioItems) {
+      for (let radio of r.radios) {
+        if (radio.value === '2') {
+          radio.checked = true;
+          break;
+        }
+      }
+    }
+    for (let r of allRadioItems) {
+      const itemTxt = r.itemText.trim();
+      if (itemTxt === targetText1 || itemTxt === targetText2) {
+        for (let radio of r.radios) {
+          if (radio.value === '1') {
+            radio.checked = true;
+            break;
+          }
+        }
+      }
+    }
+    const draftStrengths = "Удачное расположение монитора. Верхняя граница экрана на уровне глаз, шея не напрягается даже через 4-5 часов работы.\nХорошая кабельная организация. Все провода убраны.";
+    const draftProblems = "Нехватка глубины стола. Клавиатура и монитор стоят слишком близко к глазам, руки упираются в край стола.\nПлохое локальное освещение вечером. Единственный источник света - верхняя люстра, которая даёт блики.";
+    const draftImprovements = "Поменять стол на более удобный и подходящий для работы за компьютером.\nДобавить настольную лампу с регулируемым ярким светом.\nЗаменить пуфик на качественный стул с регулировкой высоты сидения и спинки.";
+    
+    const strengthsField = document.getElementById('strengthsField');
+    const problemsField = document.getElementById('problemsField');
+    const improvementsField = document.getElementById('improvementsField');
+    if (strengthsField.value.trim() === "") strengthsField.value = draftStrengths;
+    if (problemsField.value.trim() === "") problemsField.value = draftProblems;
+    if (improvementsField.value.trim() === "") improvementsField.value = draftImprovements;
+    
+    updateSummaryPanel();
+    persistToLocalStorage();  
+  }
+
+  function bindAutoSave() {
+    for (let r of allRadioItems) {
+      for (let radio of r.radios) {
+        radio.addEventListener('change', () => {
+          updateSummaryPanel();
+          persistToLocalStorage();
+        });
+      }
+    }
+    const strengths = document.getElementById('strengthsField');
+    const problems = document.getElementById('problemsField');
+    const improvements = document.getElementById('improvementsField');
+    const saveHandler = () => persistToLocalStorage();
+    strengths.addEventListener('input', saveHandler);
+    problems.addEventListener('input', saveHandler);
+    improvements.addEventListener('input', saveHandler);
+  }
+
+  function init() {
+    buildChecklist();          
+    const hasSaved = loadFromLocalStorage(); 
+    
+    if (!hasSaved) {
+      applyDefaultScoresFromDraft();
+    } else {
+      const strengthsField = document.getElementById('strengthsField');
+      const problemsField = document.getElementById('problemsField');
+      const improvementsField = document.getElementById('improvementsField');
+      if (!strengthsField.value.trim()) {
+        strengthsField.value = "Удачное расположение монитора. Верхняя граница экрана на уровне глаз, шея не напрягается даже через 4-5 часов работы.\nХорошая кабельная организация. Все провода убраны.";
+      }
+      if (!problemsField.value.trim()) {
+        problemsField.value = "Нехватка глубины стола. Клавиатура и монитор стоят слишком близко к глазам, руки упираются в край стола.\nПлохое локальное освещение вечером. Единственный источник света - верхняя люстра, которая даёт блики.";
+      }
+      if (!improvementsField.value.trim()) {
+        improvementsField.value = "Поменять стол на более удобный и подходящий для работы за компьютером.\nДобавить настольную лампу с регулируемым ярким светом.\nЗаменить пуфик на качественный стул с регулировкой высоты сидения и спинки.";
+      }
+      updateSummaryPanel();
+      persistToLocalStorage(); 
+    }
+    bindAutoSave();
+    
+    document.getElementById('saveDataBtn').addEventListener('click', () => {
+      persistToLocalStorage();
+      alert('✅ Результаты сохранены. Все данные чек-листа зафиксированы в браузере.');
     });
-    document.getElementById('strengths').value = data.strengths || '';
-    document.getElementById('problems').value = data.problems || '';
-    document.getElementById('improvements').value = data.improvements || '';
-    updateSummary();
-  }catch(e){}
-}
-
-document.addEventListener('change', (e) => {
-  if(e.target.matches('input[type="radio"]')) updateSummary();
-});
-document.getElementById('saveBtn').addEventListener('click', () => {
-  saveAll();
-  alert('Результаты сохранены. Можно переходить к шаблону отчёта.');
-});
-['strengths','problems','improvements'].forEach(id => {
-  document.getElementById(id).addEventListener('input', saveAll);
-});
-loadAll();
-updateSummary();
+  }
+  
+  window.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
