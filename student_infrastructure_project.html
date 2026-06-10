@@ -348,17 +348,15 @@
 const storageKey = 'workspaceInfrastructureProjectDraft';
 
 const checklistGroups = [
-  {
-    title:'Объект и доказательства',
+  { title:'Объект и доказательства',
     items:[
-      'Выбран конкретный объект: аудитория, зона, рабочее место или организация.',
+      'Выбран конкретный объект: аудитория, зона, рабоче место или организация.',
       'Объяснено, почему проект не повторяет работы других студентов.',
       'Есть реальные фотографии текущего состояния объекта.',
       'Проблемы подтверждаются наблюдениями, а не только личными ощущениями.'
     ]
   },
-  {
-    title:'Пользователи и сценарии',
+  { title:'Пользователи и сценарии',
     items:[
       'Описана целевая аудитория и количество пользователей.',
       'Перечислены основные задачи, которые выполняются в пространстве.',
@@ -366,8 +364,7 @@ const checklistGroups = [
       'Учтены ограничения помещения, расписания, бюджета или доступа.'
     ]
   },
-  {
-    title:'Аппаратное обеспечение',
+  { title:'Аппаратное обеспечение',
     items:[
       'Оборудование подобрано под задачи, а не по принципу максимальных характеристик.',
       'Для каждой позиции закупки указано назначение и обоснование.',
@@ -375,8 +372,7 @@ const checklistGroups = [
       'Учтены обслуживание, срок службы, модернизация и расходники.'
     ]
   },
-  {
-    title:'Эргономика и пространство',
+  { title:'Эргономика и пространство',
     items:[
       'Рассмотрены столы, кресла, посадка, высота экранов и освещение.',
       'Предложены улучшения без бюджета или с минимальными затратами.',
@@ -384,8 +380,7 @@ const checklistGroups = [
       'Решения не ухудшают проходы, безопасность и доступность пространства.'
     ]
   },
-  {
-    title:'Сеть, серверный узел и безопасность',
+  { title:'Сеть, серверный узел и безопасность',
     items:[
       'Оценены Wi-Fi, сетевые розетки, кабели и потребность в коммутаторе.',
       'Если уместно, описан серверный шкаф, ИБП, вентиляция и ограничение доступа.',
@@ -393,8 +388,7 @@ const checklistGroups = [
       'Показаны риски простоя, перегрева, повреждения или несанкционированного доступа.'
     ]
   },
-  {
-    title:'Визуализация и публикация',
+  { title:'Визуализация и публикация',
     items:[
       'Добавлено не менее 5 визуализаций будущего пространства.',
       'Для каждой визуализации указан промпт или метод создания.',
@@ -402,8 +396,7 @@ const checklistGroups = [
       'Сайт опубликован в публичном репозитории через GitHub Pages.'
     ]
   },
-  {
-    title:'Командная работа и выводы',
+  { title:'Командная работа и выводы',
     items:[
       'Указаны участники команды и обязанности каждого.',
       'Каждый участник написал собственный вывод о проделанном исследовании.',
@@ -444,14 +437,18 @@ let state = {
   checklist:{}
 };
 
-function byId(id){
-  return document.getElementById(id);
-}
+function byId(id){ return document.getElementById(id); }
 
 function escapeHtml(value){
   return String(value || '').replace(/[&<>"']/g, char => ({
     '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
   }[char]));
+}
+
+function updateDynamicLabels(){
+  document.querySelectorAll('[data-dynamic-number]').forEach((el, index) => {
+    el.textContent = el.dataset.dynamicNumber + ' ' + (index + 1);
+  });
 }
 
 function renderTeam(){
@@ -462,15 +459,15 @@ function renderTeam(){
     row.className = 'dynamic-row';
     row.innerHTML = `
       <div class="row-head">
-        <div class="row-title" data-dynamic-number="Участник">Участник ${index + 1}</div>
+        <div class="row-title">Участник ${index + 1}</div>
         <button class="btn danger remove-btn" type="button" data-remove-team="${index}">Удалить</button>
       </div>
       <div class="mini-grid">
-        <div><label class="caption">ФИО</label><input class="field" data-team="${index}" data-field="name" type="text" value="${escapeHtml(member.name)}" placeholder="Фамилия Имя" /></div>
-        <div><label class="caption">Роль в проекте</label><input class="field" data-team="${index}" data-field="role" type="text" value="${escapeHtml(member.role)}" placeholder="Аудит, смета, дизайн, HTML" /></div>
-        <div><label class="caption">Зона ответственности</label><input class="field" data-team="${index}" data-field="duties" type="text" value="${escapeHtml(member.duties)}" placeholder="Что именно сделал участник" /></div>
+        <div><label class="caption">ФИО</label><input class="field" data-team="${index}" data-field="name" type="text" value="${escapeHtml(member.name)}" /></div>
+        <div><label class="caption">Роль в проекте</label><input class="field" data-team="${index}" data-field="role" type="text" value="${escapeHtml(member.role)}" /></div>
+        <div><label class="caption">Зона ответственности</label><input class="field" data-team="${index}" data-field="duties" type="text" value="${escapeHtml(member.duties)}" /></div>
       </div>
-      <div><label class="caption">Личный вывод участника</label><textarea class="small" data-team="${index}" data-field="conclusion" placeholder="Что участник понял о выбранном пространстве, закупке, эргономике или инфраструктуре.">${escapeHtml(member.conclusion)}</textarea></div>
+      <div><label class="caption">Личный вывод участника</label><textarea class="small" data-team="${index}" data-field="conclusion">${escapeHtml(member.conclusion)}</textarea></div>
     `;
     list.appendChild(row);
   });
@@ -489,8 +486,8 @@ function renderEquipment(){
         <button class="btn danger remove-btn" type="button" data-remove-equipment="${index}">Удалить</button>
       </div>
       <div class="mini-grid">
-        <div><label class="caption">Оборудование</label><input class="field" data-equipment="${index}" data-field="name" type="text" value="${escapeHtml(item.name)}" placeholder="Монитор, кресло, SSD, ИБП" /></div>
-        <div><label class="caption">Характеристики</label><input class="field" data-equipment="${index}" data-field="specs" type="text" value="${escapeHtml(item.specs)}" placeholder="Ключевые параметры без лишней рекламы" /></div>
+        <div><label class="caption">Оборудование</label><input class="field" data-equipment="${index}" data-field="name" type="text" value="${escapeHtml(item.name)}" /></div>
+        <div><label class="caption">Характеристики</label><input class="field" data-equipment="${index}" data-field="specs" type="text" value="${escapeHtml(item.specs)}" /></div>
         <div><label class="caption">Приоритет</label><select data-equipment="${index}" data-field="priority">
           <option${item.priority === 'Обязательная' ? ' selected' : ''}>Обязательная</option>
           <option${item.priority === 'Рекомендуемая' ? ' selected' : ''}>Рекомендуемая</option>
@@ -498,16 +495,16 @@ function renderEquipment(){
         </select></div>
       </div>
       <div class="two-grid">
-        <div><label class="caption">Количество</label><input class="field" data-equipment="${index}" data-field="qty" type="text" value="${escapeHtml(item.qty)}" placeholder="Например: 12 шт." /></div>
-        <div><label class="caption">Ориентировочная цена</label><input class="field" data-equipment="${index}" data-field="price" type="text" value="${escapeHtml(item.price)}" placeholder="Например: 8 000 руб. за единицу" /></div>
+        <div><label class="caption">Количество</label><input class="field" data-equipment="${index}" data-field="qty" type="text" value="${escapeHtml(item.qty)}" /></div>
+        <div><label class="caption">Ориентировочная цена</label><input class="field" data-equipment="${index}" data-field="price" type="text" value="${escapeHtml(item.price)}" /></div>
       </div>
-      <div><label class="caption">Обоснование</label><textarea class="small" data-equipment="${index}" data-field="reason" placeholder="Какая проблема решается, почему параметры достаточны и почему нет переплаты.">${escapeHtml(item.reason)}</textarea></div>
+      <div><label class="caption">Обоснование</label><textarea class="small" data-equipment="${index}" data-field="reason">${escapeHtml(item.reason)}</textarea></div>
     `;
     list.appendChild(row);
   });
 }
 
-function updatePreviewFromPath(container, imagePath) {
+function updatePreviewFromPath(container, imagePath){
   if (!imagePath) return;
   const previewDiv = container.querySelector('.media-preview');
   if (!previewDiv) return;
@@ -516,7 +513,7 @@ function updatePreviewFromPath(container, imagePath) {
     previewDiv.innerHTML = `<img src="${imagePath}" alt="Предпросмотр" style="max-width:100%; max-height:200px;">`;
   };
   img.onerror = () => {
-    if (previewDiv.innerHTML.trim() === '' || previewDiv.innerHTML === 'Предпросмотр фотографии' || previewDiv.innerHTML === 'Предпросмотр визуализации') {
+    if (previewDiv.innerHTML.trim() === '' || previewDiv.innerHTML.includes('Предпросмотр')) {
       previewDiv.innerHTML = `Файл не найден: ${imagePath}<br>Положите его в папку images`;
     }
   };
@@ -537,16 +534,14 @@ function renderPhotos(){
       <div class="media-preview" data-photo-preview="${index}">Предпросмотр фотографии</div>
       <input class="file-input" type="file" accept="image/*" data-photo-file="${index}" />
       <label class="caption" style="margin-top:10px;">Путь к файлу для публикации</label>
-      <input class="field" data-photo="${index}" data-field="path" type="text" value="${escapeHtml(photo.path)}" placeholder="images/auditory-before-1.jpg" />
+      <input class="field" data-photo="${index}" data-field="path" type="text" value="${escapeHtml(photo.path)}" />
       <label class="caption" style="margin-top:10px;">Подпись</label>
-      <input class="field" data-photo="${index}" data-field="caption" type="text" value="${escapeHtml(photo.caption)}" placeholder="Что изображено на фото" />
+      <input class="field" data-photo="${index}" data-field="caption" type="text" value="${escapeHtml(photo.caption)}" />
       <label class="caption" style="margin-top:10px;">Вывод по фото</label>
-      <textarea class="small" data-photo="${index}" data-field="finding" placeholder="Какая проблема или особенность подтверждается этим фото.">${escapeHtml(photo.finding)}</textarea>
+      <textarea class="small" data-photo="${index}" data-field="finding">${escapeHtml(photo.finding)}</textarea>
     `;
     list.appendChild(card);
-    if (photo.path) {
-      updatePreviewFromPath(card, photo.path);
-    }
+    if (photo.path) updatePreviewFromPath(card, photo.path);
   });
 }
 
@@ -564,18 +559,16 @@ function renderVisuals(){
       <div class="media-preview" data-visual-preview="${index}">Предпросмотр визуализации</div>
       <input class="file-input" type="file" accept="image/*" data-visual-file="${index}" />
       <label class="caption" style="margin-top:10px;">Путь к файлу для публикации</label>
-      <input class="field" data-visual="${index}" data-field="path" type="text" value="${escapeHtml(visual.path)}" placeholder="images/future-zone-1.jpg" />
+      <input class="field" data-visual="${index}" data-field="path" type="text" value="${escapeHtml(visual.path)}" />
       <label class="caption" style="margin-top:10px;">Промпт или метод создания</label>
-      <textarea class="small" data-visual="${index}" data-field="prompt" placeholder="Опишите промпт, модель или способ создания визуализации.">${escapeHtml(visual.prompt)}</textarea>
+      <textarea class="small" data-visual="${index}" data-field="prompt">${escapeHtml(visual.prompt)}</textarea>
       <label class="caption" style="margin-top:10px;">Назначение визуализации</label>
-      <input class="field" data-visual="${index}" data-field="purpose" type="text" value="${escapeHtml(visual.purpose)}" placeholder="Например: показать новую рассадку и свет" />
+      <input class="field" data-visual="${index}" data-field="purpose" type="text" value="${escapeHtml(visual.purpose)}" />
       <label class="caption" style="margin-top:10px;">Что доказывает изображение</label>
-      <textarea class="small" data-visual="${index}" data-field="criteria" placeholder="Какая проектная идея становится понятнее благодаря изображению.">${escapeHtml(visual.criteria)}</textarea>
+      <textarea class="small" data-visual="${index}" data-field="criteria">${escapeHtml(visual.criteria)}</textarea>
     `;
     list.appendChild(card);
-    if (visual.path) {
-      updatePreviewFromPath(card, visual.path);
-    }
+    if (visual.path) updatePreviewFromPath(card, visual.path);
   });
 }
 
