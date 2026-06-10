@@ -503,6 +503,23 @@ function renderEquipment(){
   });
 }
 
+// Новая функция для автоматического предпросмотра из пути
+function updatePreviewFromPath(container, imagePath) {
+  if (!imagePath) return;
+  const previewDiv = container.querySelector('.media-preview');
+  if (!previewDiv) return;
+  const img = new Image();
+  img.onload = () => {
+    previewDiv.innerHTML = `<img src="${imagePath}" alt="Предпросмотр" style="max-width:100%; max-height:200px;">`;
+  };
+  img.onerror = () => {
+    if (previewDiv.innerHTML.trim() === '' || previewDiv.innerHTML === 'Предпросмотр фотографии' || previewDiv.innerHTML === 'Предпросмотр визуализации') {
+      previewDiv.innerHTML = `Файл не найден: ${imagePath}<br>Положите его в папку images`;
+    }
+  };
+  img.src = imagePath;
+}
+
 function renderPhotos(){
   const list = byId('photoList');
   list.innerHTML = '';
@@ -524,6 +541,9 @@ function renderPhotos(){
       <textarea class="small" data-photo="${index}" data-field="finding" placeholder="Какая проблема или особенность подтверждается этим фото.">${escapeHtml(photo.finding)}</textarea>
     `;
     list.appendChild(card);
+    if (photo.path) {
+      updatePreviewFromPath(card, photo.path);
+    }
   });
 }
 
@@ -550,6 +570,9 @@ function renderVisuals(){
       <textarea class="small" data-visual="${index}" data-field="criteria" placeholder="Какая проектная идея становится понятнее благодаря изображению.">${escapeHtml(visual.criteria)}</textarea>
     `;
     list.appendChild(card);
+    if (visual.path) {
+      updatePreviewFromPath(card, visual.path);
+    }
   });
 }
 
