@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Чек-лист рабочего места | Интерактивная оценка</title>
+  <title>Чек-лист рабочего места | Оценка техники и эргономики</title>
   <style>
     * {
       margin: 0;
@@ -12,10 +12,11 @@
     }
 
     body {
-      background: linear-gradient(145deg, #f4f9ff 0%, #eef2fa 100%);
-      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
-      color: #1a2634;
-      line-height: 1.5;
+      /* единый системный шрифт как на скриншоте — современный, без засечек */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f2f5f9;
+      color: #1a2c3e;
+      line-height: 1.48;
       padding: 2rem 1rem;
     }
 
@@ -24,45 +25,38 @@
       margin: 0 auto;
     }
 
-    /* карточки и глобальные стили */
-    .card {
-      background: #ffffff;
-      border-radius: 2rem;
-      box-shadow: 0 18px 35px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.02);
-      transition: all 0.2s;
-    }
-
+    /* карточки и контейнеры */
     .hero {
-      background: linear-gradient(125deg, #0b2b5c, #1d4ed8);
-      border-radius: 2rem;
-      padding: 2rem 2rem 1.8rem;
+      background: linear-gradient(105deg, #0b2b5c 0%, #1e4a8a 100%);
+      border-radius: 1.8rem;
+      padding: 1.8rem 2rem;
       margin-bottom: 2rem;
       color: white;
-      box-shadow: 0 20px 35px -12px rgba(0, 35, 90, 0.25);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
     }
 
     .hero-badge {
       display: inline-block;
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(4px);
-      padding: 0.3rem 1rem;
-      border-radius: 40px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(2px);
+      padding: 0.25rem 1rem;
+      border-radius: 2rem;
       font-size: 0.75rem;
       font-weight: 600;
       letter-spacing: 0.3px;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
       border: 1px solid rgba(255,255,255,0.2);
     }
 
     .hero h1 {
-      font-size: 2.2rem;
+      font-size: 1.9rem;
       font-weight: 700;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.3px;
       margin-bottom: 0.5rem;
     }
 
     .hero p {
-      font-size: 1rem;
+      font-size: 0.95rem;
       opacity: 0.9;
       max-width: 85%;
     }
@@ -70,92 +64,95 @@
     .nav-links {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.8rem;
-      margin-top: 1.5rem;
+      gap: 0.6rem;
+      margin-top: 1.2rem;
     }
 
     .nav-btn {
-      background: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.1);
       border-radius: 2rem;
-      padding: 0.5rem 1.2rem;
-      font-size: 0.85rem;
+      padding: 0.4rem 1.1rem;
+      font-size: 0.8rem;
       font-weight: 500;
       color: white;
       text-decoration: none;
       transition: 0.2s;
       border: 1px solid rgba(255,255,255,0.2);
-      backdrop-filter: blur(2px);
     }
 
     .nav-btn:hover {
       background: rgba(255,255,255,0.25);
-      transform: translateY(-2px);
+      transform: translateY(-1px);
     }
 
     .section-card {
-      background: white;
-      border-radius: 1.75rem;
-      padding: 1.6rem 1.8rem;
+      background: #ffffff;
+      border-radius: 1.6rem;
+      padding: 1.4rem 1.8rem;
       margin-bottom: 1.8rem;
-      box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.05);
-      border: 1px solid #eef2f8;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e6edf4;
     }
 
     .section-title {
-      font-size: 1.65rem;
+      font-size: 1.6rem;
       font-weight: 700;
-      margin-bottom: 0.4rem;
-      letter-spacing: -0.3px;
+      margin-bottom: 0.3rem;
+      letter-spacing: -0.2px;
+      color: #0c2a4e;
     }
 
-    .section-sub {
-      color: #4b5b6c;
-      border-left: 3px solid #1d4ed8;
-      padding-left: 0.9rem;
-      margin: 0.5rem 0 1.4rem 0;
-      font-size: 0.9rem;
+    .scale-note {
+      background: #f0f5fe;
+      padding: 0.7rem 1rem;
+      border-radius: 1.2rem;
+      font-size: 0.85rem;
+      margin-top: 0.6rem;
+      color: #1e4a76;
+      border-left: 3px solid #2b6ef0;
     }
 
     .grid-2col {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-      gap: 1.4rem;
+      gap: 1.5rem;
     }
 
-    .category-block {
+    .category-card {
       background: #fefefe;
-      border: 1px solid #e9edf2;
-      border-radius: 1.5rem;
+      border: 1px solid #eef2f8;
+      border-radius: 1.4rem;
       padding: 1.2rem 1.3rem;
       transition: box-shadow 0.2s;
     }
 
-    .category-block h3 {
-      font-size: 1.35rem;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
+    .category-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
     }
 
     .category-desc {
-      font-size: 0.8rem;
-      color: #5f6c7e;
+      font-size: 0.78rem;
+      color: #5e6f8d;
       margin-bottom: 1rem;
-      border-bottom: 1px dashed #e2e8f0;
+      border-bottom: 1px solid #eef2f8;
       padding-bottom: 0.5rem;
     }
 
-    .checklist-item {
-      padding: 0.9rem 0;
-      border-bottom: 1px solid #eff3f8;
+    .item-row {
+      padding: 0.85rem 0;
+      border-bottom: 1px solid #eff3fa;
     }
-    .checklist-item:last-child {
+    .item-row:last-child {
       border-bottom: none;
     }
     .item-text {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 500;
       margin-bottom: 0.6rem;
-      color: #1f2a3e;
+      color: #1f2f48;
+      line-height: 1.4;
     }
     .radio-group {
       display: flex;
@@ -167,74 +164,66 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      background: #f8fafc;
-      padding: 0.3rem 1rem;
+      background: #f8fafd;
+      padding: 0.25rem 0.9rem;
       border-radius: 2rem;
-      border: 1px solid #e2eaf1;
+      border: 1px solid #dfe8f2;
       font-size: 0.85rem;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.1s;
+      transition: all 0.1s ease;
     }
     .radio-group input {
-      accent-color: #1d4ed8;
+      accent-color: #1f5fcf;
       width: 1rem;
       height: 1rem;
       margin: 0;
     }
     .radio-group label:has(input:checked) {
-      background: #eef3ff;
-      border-color: #1d4ed8;
-      color: #0a2b6e;
+      background: #e9f0fe;
+      border-color: #2b6ef0;
+      color: #0f3b7a;
+      box-shadow: 0 0 0 1px rgba(43,110,240,0.2);
     }
 
     /* итоговая панель */
-    .result-panel {
-      background: #fafcff;
-      border-radius: 1.8rem;
-      padding: 1.6rem;
-      border: 1px solid #e2edff;
-      margin-top: 0.5rem;
-    }
-    .stats-grid {
+    .stats-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
       margin-bottom: 1.6rem;
     }
-    .stat-card {
-      background: white;
+    .stat-item {
+      background: #fafcff;
       border-radius: 1.2rem;
-      padding: 0.9rem;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-      border: 1px solid #eef2f8;
+      padding: 0.8rem;
       text-align: center;
+      border: 1px solid #eef2fc;
     }
     .stat-label {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
       font-weight: 600;
-      color: #567;
+      color: #5f7392;
+      letter-spacing: 0.3px;
     }
     .stat-number {
-      font-size: 2.2rem;
+      font-size: 2rem;
       font-weight: 800;
-      color: #0f2b62;
+      color: #1f4788;
       line-height: 1.2;
     }
     .result-badge {
-      padding: 0.5rem 1rem;
+      background: #e6f4ea;
+      color: #1f6e43;
+      padding: 0.4rem 1rem;
       border-radius: 2rem;
-      font-weight: 700;
+      font-weight: 600;
+      font-size: 0.8rem;
       display: inline-block;
-      margin-top: 0.5rem;
     }
-    .result-badge.green {
-      background: #e0f2e9;
-      color: #0b5e42;
-    }
-    .double-textarea {
+
+    .double-area {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1.2rem;
@@ -242,114 +231,116 @@
     }
     textarea {
       width: 100%;
-      padding: 0.9rem;
+      border: 1px solid #dce5ef;
       border-radius: 1rem;
-      border: 1px solid #dce3ec;
+      padding: 0.8rem;
       font-family: inherit;
       font-size: 0.85rem;
-      background: white;
+      background: #ffffff;
       resize: vertical;
     }
-    .btn-save {
-      background: linear-gradient(95deg, #1e3a8a, #2563eb);
+    .btn-primary {
+      background: linear-gradient(100deg, #1c4587, #2b6ef0);
       border: none;
-      padding: 0.8rem 1.8rem;
+      padding: 0.7rem 1.8rem;
       border-radius: 2rem;
       font-weight: 600;
       color: white;
       cursor: pointer;
       transition: 0.2s;
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
-      border: 1px solid rgba(255,255,255,0.2);
+      font-size: 0.85rem;
     }
-    .btn-save:hover {
-      background: linear-gradient(95deg, #0f2b6b, #1d4ed8);
+    .btn-primary:hover {
+      background: linear-gradient(100deg, #12376e, #1f5acf);
       transform: scale(0.98);
     }
+
     footer {
       text-align: center;
-      margin-top: 2rem;
-      font-size: 0.8rem;
-      color: #6c7a8e;
+      font-size: 0.75rem;
+      color: #6b7c98;
+      margin-top: 1.8rem;
     }
     @media (max-width: 720px) {
-      .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem;}
-      .double-textarea { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+      .double-area { grid-template-columns: 1fr; }
       .hero p { max-width: 100%; }
-      .section-card { padding: 1.2rem; }
+      .section-card { padding: 1rem; }
     }
   </style>
 </head>
 <body>
 <div class="container">
   <div class="hero">
-    <div class="hero-badge">⚡ Интерактивный чек-лист</div>
-    <h1>Рабочее место: эргономика, техника, эффективность</h1>
-    <p>Оцените каждый параметр: 0 — не соответствует, 1 — частично, 2 — полностью. Итоговая оценка формируется автоматически на основе ваших ответов.</p>
+    <div class="hero-badge">📋 Оценка рабочего пространства</div>
+    <h1>Чек-лист организации места</h1>
+    <p>Эргономика, техника, эффективность. Отметьте каждый пункт: 0 — не соответствует, 1 — частично, 2 — полностью.</p>
     <div class="nav-links">
       <a class="nav-btn" href="student_report_template.html">📄 Шаблон отчёта</a>
-      <a class="nav-btn" href="student_html_guide.html">📖 Инструкция по HTML</a>
-      <a class="nav-btn" href="student_infrastructure_project.html">🖥️ Проект оборудования</a>
+      <a class="nav-btn" href="student_html_guide.html">📘 Инструкция по HTML</a>
+      <a class="nav-btn" href="student_infrastructure_project.html">🖥️ Проект</a>
       <a class="nav-btn" href="index.html">🏠 Главная</a>
-      <a class="nav-btn" href="student_publish_site_guide.html">🌐 Публикация сайта</a>
+      <a class="nav-btn" href="student_publish_site_guide.html">🌐 Публикация</a>
     </div>
   </div>
 
   <div class="section-card">
-    <div class="section-title">📋 Шкала оценки</div>
-    <div style="background:#F5F9FF; padding:0.8rem 1rem; border-radius:1.2rem;">
-      <span style="font-weight:700;">0</span> — не выполнено / критическое несоответствие<br>
-      <span style="font-weight:700;">1</span> — выполнено частично, есть недостатки<br>
-      <span style="font-weight:700;">2</span> — полностью соответствует, оптимально для задач
+    <div class="section-title">📌 Как оценивать</div>
+    <div class="scale-note">
+      <strong>0 баллов</strong> — условие не выполнено / не соответствует<br>
+      <strong>1 балл</strong> — выполнено частично, есть недостатки<br>
+      <strong>2 балла</strong> — полностью соответствует оптимальному сценарию
     </div>
   </div>
 
-  <div class="grid-2col" id="checklist-container"></div>
+  <!-- Контейнер для динамических категорий -->
+  <div class="grid-2col" id="checklistRoot"></div>
 
-  <div class="section-card" id="result-section">
+  <!-- Блок итогов и наблюдений -->
+  <div class="section-card">
     <div class="section-title">📊 Итоговая оценка</div>
-    <div class="result-panel">
-      <div class="stats-grid" id="statsGrid">
-        <div class="stat-card"><div class="stat-label">Набрано баллов</div><div class="stat-number" id="totalScore">0</div></div>
-        <div class="stat-card"><div class="stat-label">Максимум</div><div class="stat-number" id="maxScore">92</div></div>
-        <div class="stat-card"><div class="stat-label">Процент</div><div class="stat-number" id="percentScore">0%</div></div>
-        <div class="stat-card"><div class="stat-label">Результат</div><div id="resultText" class="result-badge green" style="font-size:0.85rem; margin-top:0.3rem;">—</div></div>
-      </div>
+    <div class="stats-row" id="statsArea">
+      <div class="stat-item"><div class="stat-label">Набрано баллов</div><div class="stat-number" id="totalScore">0</div></div>
+      <div class="stat-item"><div class="stat-label">Максимум</div><div class="stat-number" id="maxScoreVal">0</div></div>
+      <div class="stat-item"><div class="stat-label">Процент</div><div class="stat-number" id="percentVal">0%</div></div>
+      <div class="stat-item"><div class="stat-label">Результат</div><div id="resultText" class="result-badge" style="margin-top: 8px;">—</div></div>
+    </div>
 
-      <div class="double-textarea">
-        <div>
-          <label style="font-weight:600;">✨ Три сильные стороны</label>
-          <textarea id="strengthsField" placeholder="Сильные стороны рабочего места..."></textarea>
-        </div>
-        <div>
-          <label style="font-weight:600;">⚠️ Три проблемные зоны</label>
-          <textarea id="problemsField" placeholder="Проблемные зоны..."></textarea>
-        </div>
+    <div class="double-area">
+      <div>
+        <label style="font-weight: 600;">✨ Сильные стороны (ключевые наблюдения)</label>
+        <textarea id="strengthsField" rows="4" placeholder="Удачное расположение монитора. Верхняя граница экрана на уровне глаз..."></textarea>
       </div>
       <div>
-        <label style="font-weight:600;">🚀 Три улучшения с наибольшим эффектом</label>
-        <textarea id="improvementsField" rows="3" placeholder="Рекомендации..."></textarea>
-      </div>
-      <div style="display: flex; gap: 1rem; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
-        <button class="btn-save" id="saveDataBtn">💾 Сохранить результаты</button>
-        <span style="font-size:0.75rem; color:#4f6f8f;">✅ Данные сохраняются в браузере автоматически при изменении</span>
+        <label style="font-weight: 600;">⚠️ Проблемные зоны</label>
+        <textarea id="problemsField" rows="4" placeholder="Нехватка глубины стола. Плохое локальное освещение..."></textarea>
       </div>
     </div>
+    <div>
+      <label style="font-weight: 600;">🚀 Три улучшения с наибольшим эффектом</label>
+      <textarea id="improvementsField" rows="3" placeholder="Поменять стол, добавить лампу, заменить стул..."></textarea>
+    </div>
+    <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+      <button class="btn-primary" id="saveDataBtn">💾 Сохранить результаты</button>
+      <span style="font-size: 0.75rem; color: #4a627a;">✔️ данные автоматически сохраняются в браузере</span>
+    </div>
   </div>
-  <footer>Интерактивная оценка рабочего места — чек-лист по стандартам эргономики и технической оснащённости</footer>
+  <footer>Интерактивный чек-лист — оценка рабочего места по 9 категориям</footer>
 </div>
 
 <script>
-  const checklistData = [
-    { title: "1. Назначение рабочего места", desc: "Соответствует ли конфигурация реальным задачам пользователя.",
+  // --------------------------------------------------------------
+  // ПОЛНЫЙ СПИСОК КАТЕГОРИЙ И ПУНКТОВ (по черновику)
+  // --------------------------------------------------------------
+  const categories = [
+    { name: "1. Назначение рабочего места", desc: "Соответствие конфигурации реальным задачам.",
       items: [
         "Понятно, для каких задач предназначено рабочее место: учёба, документооборот, аналитика, проектная работа, графика, видеосвязь, программирование.",
         "Подбор техники соответствует этим задачам, а не принципу «чем мощнее, тем лучше».",
         "Рабочее место не перегружено лишними устройствами, которые фактически не используются.",
         "Конфигурация допускает разумный запас по производительности на ближайшую перспективу."
       ] },
-    { title: "2. Пространство и компоновка", desc: "Насколько рационально организовано пространство и размещено оборудование.",
+    { name: "2. Пространство и компоновка", desc: "Рациональность организации пространства и оборудования.",
       items: [
         "Стол и рабочая поверхность достаточны по размеру для техники и комфортной работы.",
         "Оборудование размещено так, чтобы не мешать движениям и доступу к основным предметам.",
@@ -357,7 +348,7 @@
         "Розетки, удлинители и блоки питания расположены безопасно и удобно.",
         "В рабочей зоне нет помех для вентиляции техники и свободного доступа к оборудованию."
       ] },
-    { title: "3. Эргономика", desc: "Оценка посадки, положения монитора и условий длительной работы.",
+    { name: "3. Эргономика", desc: "Посадка, положение монитора, условия длительной работы.",
       items: [
         "Высота стола и посадка позволяют работать без постоянного напряжения спины и плеч.",
         "Монитор расположен на комфортной высоте: верхняя часть экрана примерно на уровне глаз или немного ниже.",
@@ -366,7 +357,7 @@
         "Освещение не создаёт сильных бликов на экране и не мешает восприятию изображения.",
         "Рабочее место допускает длительную работу без выраженного дискомфорта."
       ] },
-    { title: "4. Экран и визуальная нагрузка", desc: "Соответствие монитора задачам и условиям восприятия.",
+    { name: "4. Экран и визуальная нагрузка", desc: "Соответствие монитора задачам и условиям восприятия.",
       items: [
         "Размер экрана соответствует задачам пользователя.",
         "Разрешение экрана достаточно для комфортной работы с документами, таблицами и интерфейсами.",
@@ -374,7 +365,7 @@
         "Монитор установлен устойчиво и не занимает пространство нерационально.",
         "При необходимости предусмотрен второй экран или возможность его подключения."
       ] },
-    { title: "5. Форм-фактор и тип техники", desc: "Насколько выбранная форма техники соответствует сценарию использования.",
+    { name: "5. Форм-фактор и тип техники", desc: "Соответствие форм-фактора сценарию использования.",
       items: [
         "Форм-фактор устройства соответствует условиям использования: настольный ПК, ноутбук, моноблок, мини-ПК.",
         "Выбранная форма техники оправдана задачами, а не только внешним удобством.",
@@ -382,7 +373,7 @@
         "Для стационарного рабочего места техника не теряет в удобстве из-за чрезмерной компактности.",
         "Для мобильной работы не используется избыточно громоздкая конфигурация."
       ] },
-    { title: "6. Оперативная память", desc: "Соответствие ОЗУ реальной нагрузке рабочего места.",
+    { name: "6. Оперативная память", desc: "Соответствие ОЗУ реальной нагрузке.",
       items: [
         "Объём оперативной памяти соответствует числу одновременно используемых программ.",
         "Конфигурация памяти подходит под рабочую нагрузку: браузер, документы, видеосвязь, аналитика, специализированные программы.",
@@ -390,7 +381,7 @@
         "Память подобрана не по минимальному порогу запуска системы, а по реальному сценарию работы.",
         "Для многозадачной среды предусмотрен разумный запас по ОЗУ."
       ] },
-    { title: "7. Накопители данных", desc: "Оценка скорости, объёма и логики хранения данных.",
+    { name: "7. Накопители данных", desc: "Скорость, объём и логика хранения.",
       items: [
         "Системный накопитель достаточно быстрый для запуска операционной системы и приложений.",
         "Объём накопителя соответствует реальному объёму рабочих данных.",
@@ -398,7 +389,7 @@
         "В конфигурации учтено различие между рабочим накопителем и архивным хранением.",
         "При необходимости предусмотрена логика резервирования или внешнего хранения данных."
       ] },
-    { title: "8. Надёжность, обслуживание, срок службы", desc: "Оценка устойчивости системы в реальной эксплуатации.",
+    { name: "8. Надёжность, обслуживание, срок службы", desc: "Устойчивость системы в эксплуатации.",
       items: [
         "Техника не перегревается в условиях реального использования.",
         "Корпус, форм-фактор и размещение не затрудняют вентиляцию.",
@@ -406,7 +397,7 @@
         "Компоновка не приводит к ускоренному износу техники из-за пыли, перегрева или вибраций.",
         "Рабочее место допускает безопасную и длительную эксплуатацию."
       ] },
-    { title: "9. Логика закупки для организации", desc: "Оценка техники с точки зрения управленческого решения.",
+    { name: "9. Логика закупки для организации", desc: "Управленческая оценка техники.",
       items: [
         "Конфигурация соответствует реальной категории сотрудников, а не усреднённому шаблону «для всех одинаково».",
         "Баланс между ценой и производительностью выглядит обоснованным.",
@@ -417,27 +408,38 @@
       ] }
   ];
 
-  let allRadioItems = [];   
-  let maxTotal = 0;
-  const container = document.getElementById('checklist-container');
-  
+  // Хранилище всех radio элементов: { groupName, radios, itemText }
+  let allGroups = [];
+  let maxPossible = 0;
+
+  // DOM-элементы
+  const root = document.getElementById("checklistRoot");
+  const totalSpan = document.getElementById("totalScore");
+  const maxSpan = document.getElementById("maxScoreVal");
+  const percentSpan = document.getElementById("percentVal");
+  const resultTextSpan = document.getElementById("resultText");
+  const strengthsTextarea = document.getElementById("strengthsField");
+  const problemsTextarea = document.getElementById("problemsField");
+  const improvementsTextarea = document.getElementById("improvementsField");
+
+  // Построить интерфейс
   function buildChecklist() {
-    container.innerHTML = '';
-    let itemCounter = 0;
-    for (let cat of checklistData) {
-      const catDiv = document.createElement('div');
-      catDiv.className = 'category-block';
-      catDiv.innerHTML = `
-        <h3>${cat.title}</h3>
-        <div class="category-desc">${cat.desc}</div>
-        <div class="items-list" id="cat-${itemCounter}"></div>
-      `;
-      const itemsContainer = catDiv.querySelector('.items-list');
+    root.innerHTML = "";
+    allGroups = [];
+    maxPossible = 0;
+    let globalIdx = 0;
+
+    for (let cat of categories) {
+      const card = document.createElement("div");
+      card.className = "category-card";
+      card.innerHTML = `<h3>${cat.name}</h3><div class="category-desc">${cat.desc}</div><div class="items-list" id="list-${globalIdx}"></div>`;
+      const itemsContainer = card.querySelector(".items-list");
+      
       for (let itemText of cat.items) {
-        const groupName = `q_${itemCounter}`;
-        const itemWrapper = document.createElement('div');
-        itemWrapper.className = 'checklist-item';
-        itemWrapper.innerHTML = `
+        const groupName = `group_${globalIdx}`;
+        const row = document.createElement("div");
+        row.className = "item-row";
+        row.innerHTML = `
           <div class="item-text">${itemText}</div>
           <div class="radio-group" data-group="${groupName}">
             <label><input type="radio" name="${groupName}" value="0"> 0</label>
@@ -445,82 +447,88 @@
             <label><input type="radio" name="${groupName}" value="2"> 2</label>
           </div>
         `;
-        itemsContainer.appendChild(itemWrapper);
-        const radios = itemWrapper.querySelectorAll(`input[name="${groupName}"]`);
-        allRadioItems.push({ name: groupName, radios: [...radios], itemText: itemText });
-        maxTotal += 2;
-        itemCounter++;
+        const radios = row.querySelectorAll(`input[name="${groupName}"]`);
+        allGroups.push({
+          groupName: groupName,
+          radios: Array.from(radios),
+          itemText: itemText
+        });
+        itemsContainer.appendChild(row);
+        maxPossible += 2;
+        globalIdx++;
       }
-      container.appendChild(catDiv);
+      root.appendChild(card);
     }
-    document.getElementById('maxScore').innerText = maxTotal;
+    maxSpan.innerText = maxPossible;
   }
 
+  // Подсчет суммы
   function computeTotal() {
     let total = 0;
-    for (let r of allRadioItems) {
-      let checkedVal = null;
-      for (let radio of r.radios) {
+    for (let g of allGroups) {
+      let selected = null;
+      for (let radio of g.radios) {
         if (radio.checked) {
-          checkedVal = parseInt(radio.value, 10);
+          selected = parseInt(radio.value, 10);
           break;
         }
       }
-      if (checkedVal !== null) total += checkedVal;
+      if (selected !== null) total += selected;
     }
     return total;
   }
 
-  function updateSummaryPanel() {
+  // Обновить панель итогов
+  function updateSummary() {
     const total = computeTotal();
-    const maxV = maxTotal;
-    const percent = maxV ? Math.round((total / maxV) * 100) : 0;
-    document.getElementById('totalScore').innerText = total;
-    document.getElementById('percentScore').innerText = percent + '%';
-    let resultMessage = '';
-    let badgeClass = 'result-badge';
-    if (percent >= 85) resultMessage = '✅ Рабочее место организовано грамотно и соответствует задачам', badgeClass += ' green';
-    else if (percent >= 65) resultMessage = '🟡 Хорошая организация, есть точки для улучшения', badgeClass += ' green';
-    else if (percent >= 45) resultMessage = '⚡ Функционально, но заметны ограничения', badgeClass += ' green';
-    else resultMessage = '🔴 Требуется серьёзная переработка', badgeClass += ' green';
+    const percent = maxPossible > 0 ? Math.round((total / maxPossible) * 100) : 0;
+    totalSpan.innerText = total;
+    percentSpan.innerText = `${percent}%`;
     
-    const resultDiv = document.getElementById('resultText');
-    resultDiv.innerText = resultMessage;
-    resultDiv.className = 'result-badge green';
+    let verdict = "";
+    if (percent >= 85) verdict = "✅ Рабочее место организовано грамотно и соответствует задачам";
+    else if (percent >= 65) verdict = "🟡 Хорошая организация, есть точки для улучшения";
+    else if (percent >= 45) verdict = "⚠️ Функционально, но заметны ограничения";
+    else verdict = "🔴 Требуется серьёзная переработка";
+    
+    resultTextSpan.innerText = verdict;
+    resultTextSpan.className = "result-badge";
   }
 
-  function persistToLocalStorage() {
+  // Сохранить всё в localStorage (оценки + текстовые поля)
+  function persistFullState() {
     const scoresMap = {};
-    for (let r of allRadioItems) {
-      let selected = null;
-      for (let radio of r.radios) {
+    for (let g of allGroups) {
+      let selectedVal = null;
+      for (let radio of g.radios) {
         if (radio.checked) {
-          selected = radio.value;
+          selectedVal = radio.value;
           break;
         }
       }
-      if (selected !== null) scoresMap[r.name] = selected;
+      if (selectedVal !== null) scoresMap[g.groupName] = selectedVal;
     }
-    const storageData = {
+    const dataToStore = {
       scores: scoresMap,
-      strengths: document.getElementById('strengthsField').value,
-      problems: document.getElementById('problemsField').value,
-      improvements: document.getElementById('improvementsField').value,
-      timestamp: Date.now()
+      strengths: strengthsTextarea.value,
+      problems: problemsTextarea.value,
+      improvements: improvementsTextarea.value,
+      savedAt: Date.now()
     };
-    localStorage.setItem('workspace_checklist_full', JSON.stringify(storageData));
+    localStorage.setItem("workspace_checklist_full", JSON.stringify(dataToStore));
   }
 
-  function loadFromLocalStorage() {
-    const raw = localStorage.getItem('workspace_checklist_full');
+  // Загрузить из localStorage
+  function loadFromStorage() {
+    const raw = localStorage.getItem("workspace_checklist_full");
     if (!raw) return false;
     try {
-      const data = JSON.parse(raw);
-      if (data.scores) {
-        for (let r of allRadioItems) {
-          const savedVal = data.scores[r.name];
+      const stored = JSON.parse(raw);
+      if (stored.scores) {
+        for (let g of allGroups) {
+          const savedVal = stored.scores[g.groupName];
           if (savedVal !== undefined) {
-            for (let radio of r.radios) {
+            for (let radio of g.radios) {
               if (radio.value === savedVal) {
                 radio.checked = true;
                 break;
@@ -529,101 +537,92 @@
           }
         }
       }
-      if (data.strengths !== undefined) document.getElementById('strengthsField').value = data.strengths;
-      if (data.problems !== undefined) document.getElementById('problemsField').value = data.problems;
-      if (data.improvements !== undefined) document.getElementById('improvementsField').value = data.improvements;
-      updateSummaryPanel();
+      if (stored.strengths !== undefined) strengthsTextarea.value = stored.strengths;
+      if (stored.problems !== undefined) problemsTextarea.value = stored.problems;
+      if (stored.improvements !== undefined) improvementsTextarea.value = stored.improvements;
+      updateSummary();
       return true;
     } catch(e) { return false; }
   }
 
-  function applyDefaultScoresFromDraft() {
-    const targetText1 = "Стол и рабочая поверхность достаточны по размеру для техники и комфортной работы.";   
-    const targetText2 = "Освещение не создаёт сильных бликов на экране и не мешает восприятию изображения."; 
-    
-    for (let r of allRadioItems) {
-      for (let radio of r.radios) {
-        if (radio.value === '2') {
+  // Дефолтные значения в точности как в черновике: 90 баллов, два пункта со снижением (глубина стола + освещение)
+  function setDefaultDraftState() {
+    // Сначала всем выставляем "2"
+    for (let g of allGroups) {
+      for (let radio of g.radios) {
+        if (radio.value === "2") {
           radio.checked = true;
           break;
         }
       }
     }
-    for (let r of allRadioItems) {
-      const itemTxt = r.itemText.trim();
-      if (itemTxt === targetText1 || itemTxt === targetText2) {
-        for (let radio of r.radios) {
-          if (radio.value === '1') {
+    // Находим нужные пункты и ставим "1"
+    const targetProblem1 = "Стол и рабочая поверхность достаточны по размеру для техники и комфортной работы.";
+    const targetProblem2 = "Освещение не создаёт сильных бликов на экране и не мешает восприятию изображения.";
+    
+    for (let g of allGroups) {
+      if (g.itemText.trim() === targetProblem1 || g.itemText.trim() === targetProblem2) {
+        for (let radio of g.radios) {
+          if (radio.value === "1") {
             radio.checked = true;
             break;
           }
         }
       }
     }
-    const draftStrengths = "Удачное расположение монитора. Верхняя граница экрана на уровне глаз, шея не напрягается даже через 4-5 часов работы.\nХорошая кабельная организация. Все провода убраны.";
-    const draftProblems = "Нехватка глубины стола. Клавиатура и монитор стоят слишком близко к глазам, руки упираются в край стола.\nПлохое локальное освещение вечером. Единственный источник света - верхняя люстра, которая даёт блики.";
-    const draftImprovements = "Поменять стол на более удобный и подходящий для работы за компьютером.\nДобавить настольную лампу с регулируемым ярким светом.\nЗаменить пуфик на качественный стул с регулировкой высоты сидения и спинки.";
+    // текстовые поля — как на скриншотах
+    strengthsTextarea.value = "Удачное расположение монитора. Верхняя граница экрана на уровне глаз, шея не напрягается даже через 4-5 часов работы.\nХорошая кабельная организация. Все провода убраны.";
+    problemsTextarea.value = "Нехватка глубины стола. Клавиатура и монитор стоят слишком близко к глазам, руки упираются в край стола.\nПлохое локальное освещение вечером. Единственный источник света - верхняя люстра, которая даёт блики.";
+    improvementsTextarea.value = "Поменять стол на более удобный и подходящий для работы за компьютером.\nДобавить настольную лампу с регулируемым ярким светом.\nЗаменить пуфик на качественный стул с регулировкой высоты сидения и спинки.";
     
-    const strengthsField = document.getElementById('strengthsField');
-    const problemsField = document.getElementById('problemsField');
-    const improvementsField = document.getElementById('improvementsField');
-    if (strengthsField.value.trim() === "") strengthsField.value = draftStrengths;
-    if (problemsField.value.trim() === "") problemsField.value = draftProblems;
-    if (improvementsField.value.trim() === "") improvementsField.value = draftImprovements;
-    
-    updateSummaryPanel();
-    persistToLocalStorage();  
+    updateSummary();
+    persistFullState();
   }
 
+  // Привязать события автосохранения
   function bindAutoSave() {
-    for (let r of allRadioItems) {
-      for (let radio of r.radios) {
-        radio.addEventListener('change', () => {
-          updateSummaryPanel();
-          persistToLocalStorage();
+    for (let g of allGroups) {
+      for (let radio of g.radios) {
+        radio.addEventListener("change", () => {
+          updateSummary();
+          persistFullState();
         });
       }
     }
-    const strengths = document.getElementById('strengthsField');
-    const problems = document.getElementById('problemsField');
-    const improvements = document.getElementById('improvementsField');
-    const saveHandler = () => persistToLocalStorage();
-    strengths.addEventListener('input', saveHandler);
-    problems.addEventListener('input', saveHandler);
-    improvements.addEventListener('input', saveHandler);
+    strengthsTextarea.addEventListener("input", () => persistFullState());
+    problemsTextarea.addEventListener("input", () => persistFullState());
+    improvementsTextarea.addEventListener("input", () => persistFullState());
   }
 
+  // Инициализация приложения
   function init() {
-    buildChecklist();          
-    const hasSaved = loadFromLocalStorage(); 
-    
-    if (!hasSaved) {
-      applyDefaultScoresFromDraft();
+    buildChecklist();            // создаём радиокнопки, allGroups заполнен
+    const hasStored = loadFromStorage();
+    if (!hasStored) {
+      setDefaultDraftState();    // выставляем 90 баллов, комментарии из черновика
     } else {
-      const strengthsField = document.getElementById('strengthsField');
-      const problemsField = document.getElementById('problemsField');
-      const improvementsField = document.getElementById('improvementsField');
-      if (!strengthsField.value.trim()) {
-        strengthsField.value = "Удачное расположение монитора. Верхняя граница экрана на уровне глаз, шея не напрягается даже через 4-5 часов работы.\nХорошая кабельная организация. Все провода убраны.";
+      // если данные загружены, но вдруг текстовые поля пустые — подставим содержание черновика
+      if (!strengthsTextarea.value.trim()) {
+        strengthsTextarea.value = "Удачное расположение монитора. Верхняя граница экрана на уровне глаз, шея не напрягается даже через 4-5 часов работы.\nХорошая кабельная организация. Все провода убраны.";
       }
-      if (!problemsField.value.trim()) {
-        problemsField.value = "Нехватка глубины стола. Клавиатура и монитор стоят слишком близко к глазам, руки упираются в край стола.\nПлохое локальное освещение вечером. Единственный источник света - верхняя люстра, которая даёт блики.";
+      if (!problemsTextarea.value.trim()) {
+        problemsTextarea.value = "Нехватка глубины стола. Клавиатура и монитор стоят слишком близко к глазам, руки упираются в край стола.\nПлохое локальное освещение вечером. Единственный источник света - верхняя люстра, которая даёт блики.";
       }
-      if (!improvementsField.value.trim()) {
-        improvementsField.value = "Поменять стол на более удобный и подходящий для работы за компьютером.\nДобавить настольную лампу с регулируемым ярким светом.\nЗаменить пуфик на качественный стул с регулировкой высоты сидения и спинки.";
+      if (!improvementsTextarea.value.trim()) {
+        improvementsTextarea.value = "Поменять стол на более удобный и подходящий для работы за компьютером.\nДобавить настольную лампу с регулируемым ярким светом.\nЗаменить пуфик на качественный стул с регулировкой высоты сидения и спинки.";
       }
-      updateSummaryPanel();
-      persistToLocalStorage(); 
+      updateSummary();
+      persistFullState();
     }
     bindAutoSave();
-    
-    document.getElementById('saveDataBtn').addEventListener('click', () => {
-      persistToLocalStorage();
-      alert('✅ Результаты сохранены. Все данные чек-листа зафиксированы в браузере.');
+    // дополнительная кнопка сохранения
+    document.getElementById("saveDataBtn").addEventListener("click", () => {
+      persistFullState();
+      alert("✅ Результаты сохранены. Оценки и заметки сохранены в браузере.");
     });
   }
-  
-  window.addEventListener('DOMContentLoaded', init);
+
+  init();
 </script>
 </body>
 </html>
